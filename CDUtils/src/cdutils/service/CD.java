@@ -1,5 +1,7 @@
 package cdutils.service;
 
+import java.io.OutputStream;
+
 import javax.sound.sampled.AudioInputStream;
 
 import cdutils.domain.TOC;
@@ -89,6 +91,16 @@ public class CD {
 	}
 	
 	/**
+	 * Gets the tracks with the given id and passes it throughtto the given output stream.
+	 * @param track - the id of the track to get.
+	 * @param output - the stream to pass the track through to.
+	 * @throws DiscReadException if there is no disc in the drive or the disc cannot be read.
+	 */
+	public void getTrack(int track, OutputStream output) throws DiscReadException {
+		cdda.getTrack(track, null, output);
+	}
+	
+	/**
 	 * Gets the track with the given id from the disc as an {@code AudioInputStream}.
 	 * @param track - the id of the track to get.
 	 * @param listener - a progress listener.
@@ -97,6 +109,17 @@ public class CD {
 	 */
 	public AudioInputStream getTrack(int track, RipProgressListener listener) throws DiscReadException {
 		return cdda.getTrack(track, listener); 
+	}
+	
+	/**
+	 * Gets the tracks with the given id and passes it throughtto the given output stream.
+	 * @param track - the id of the track to get.
+	 * @param listener - a progress listener.
+	 * @param output - the stream to pass the track through to.
+	 * @throws DiscReadException if there is no disc in the drive or the disc cannot be read.
+	 */
+	public void getTrack(int track, RipProgressListener listener, OutputStream output) throws DiscReadException {
+		cdda.getTrack(track, listener, output);
 	}
 	
 	/**

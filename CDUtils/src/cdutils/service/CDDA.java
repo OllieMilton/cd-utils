@@ -1,5 +1,8 @@
 package cdutils.service;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -145,6 +148,18 @@ public class CDDA {
 			throw new RuntimeException(e);
 		}
 		return ais;
+	}
+	
+	public void getTrack(int track, RipProgressListener listener, OutputStream output) throws DiscReadException {
+		AudioInputStream ais = getTrack(track, listener);
+		byte[] bout = new byte[1024];
+		try {
+			while (ais.read(bout) > 0) {
+				output.write(bout);
+			}
+		} catch (IOException e) {
+			throw new DiscReadException(e);
+		}
 	}
 	
 	/**
