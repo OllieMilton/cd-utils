@@ -17,4 +17,8 @@ public class DiscReadException extends Exception {
 	public DiscReadException(String msg) {
 		super(msg);
 	}
+	
+	public DiscReadException(Throwable cause) {
+		super(cause);
+	}
 }
