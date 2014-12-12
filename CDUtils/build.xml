@@ -31,6 +31,7 @@
 		<jar basedir="${build}" destfile="${build}/cdutils.jar"/>
   		<copy file="${build}/cdutils.jar" todir="${libDir}/cdutils" overwrite="true"/>
   		<delete dir="${build}"/>
+  		<delete dir="lib"/>
 	</target>
   	
 </project>
