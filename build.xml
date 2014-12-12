@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir="." default="jar">
+<project xmlns:ivy="antlib:org.apache.ivy.ant" basedir="." default="jar">
 	
 	<property name="build" value="build"/>
-	<property name="libDir" value="/usr/lib/java"/>
+	<property name="libDir" value="/home/ollie/workspace/ivy_cache/cache"/>
 	<target name="clean">
 		<delete dir="${build}"/>
 	</target>
@@ -11,26 +11,25 @@
 		<mkdir dir="${build}"/>
 	</target>
 	
-	<target name="compile" depends="init">
+	<target name="resolve" description="--> retrieve dependencies with ivy" depends="init">
+		<ivy:retrieve />
+	</target>
+	
+	<target name="compile" depends="resolve">
 		<!-- Compile the java code -->
 		<javac srcdir="src" destdir="${build}" debug="true" debuglevel="lines,vars,source">
 			<classpath>
-				<pathelement location="${libDir}/commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
-				<pathelement location="${libDir}/tritonus/tritonus_share-0.3.6.jar"/>
-				<pathelement location="${libDir}/jna/jna.jar"/>
+				<pathelement location="${libDir}/commons-logging/commons-logging/jars/commons-logging-1.2.jar"/>
+				<pathelement location="${libDir}/com.googlecode.soundlibs/tritonus-share/jars/tritonus-share-0.3.7-2.jar"/>
+				<pathelement location="${libDir}/net.java.dev.jna/jna/jars/jna-4.1.0.jar"/>
 			</classpath>
 		</javac>
 	</target>
 	
   	<target name="jar" depends="compile">
 		<!-- Build the jar file -->
-		<jar basedir="${build}" destfile="${build}/cdutils.jar">
-			<zipfileset src="${libDir}/commons-logging-1.1.1/commons-logging-1.1.1.jar"/>
-			<zipfileset src="${libDir}/tritonus/tritonus_share-0.3.6.jar"/>
-			<zipfileset src="${libDir}/jna/jna.jar"/>
-		</jar>	
+		<jar basedir="${build}" destfile="${build}/cdutils.jar"/>
   		<copy file="${build}/cdutils.jar" todir="${libDir}/cdutils" overwrite="true"/>
-  		<!--copy file="${build}/cdutils.jar" todir="/home/ollie/workspace/jTunes/war/WEB-INF/lib" overwrite="true"/-->
   		<delete dir="${build}"/>
 	</target>
   	
