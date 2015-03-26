@@ -2,7 +2,7 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant" basedir="." default="publish">
 	<ivy:settings file="/home/ollie/workspace/ivy_settings/ivysettings.xml" />
 	<property name="build" value="build"/>
-	<property name="libDir" value="/home/ollie/.ivy2/cache/"/>
+	
 	<target name="clean">
 		<delete dir="${build}"/>
 	</target>
