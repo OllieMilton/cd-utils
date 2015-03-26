@@ -1,7 +1,7 @@
 <ivy-module version="2.0">
     <info organisation="cdutils" module="cdutils"/>
     <dependencies>
-        <dependency org="commons-logging" name="commons-logging" rev="1.2" conf="*->default"/>
+        <dependency org="commons-logging" name="commons-logging" rev="1.2"/>
         <dependency org="net.java.dev.jna" name="jna" rev="4.1.0"/>
         <dependency org="com.googlecode.soundlibs" name="tritonus-share" rev="0.3.7-2"/>
     </dependencies>
