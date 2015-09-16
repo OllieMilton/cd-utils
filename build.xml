@@ -25,7 +25,9 @@
 	
   	<target name="jar" depends="compile">
 		<!-- Build the jar file -->
-		<jar basedir="${build}" destfile="${build}/cdutils.jar"/>
+		<jar basedir="${build}" destfile="${build}/cdutils.jar">
+			<fileset dir="src" includes="**/*.java"/>
+		</jar>
 	</target>  	
 	
 	<target name="publish" depends="jar">
