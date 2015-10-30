@@ -27,7 +27,7 @@ import cdutils.exception.DiscReadException;
  * @author Ollie
  *
  */
-public class CDDA {
+public class CDDA implements CD {
 
 	private final Log logger;
 	private volatile boolean busy;
@@ -57,47 +57,43 @@ public class CDDA {
 		cdio = new CDIO();
 	}
 		
-	/**
-	 * Ejects the CD currently in the drive.
-	 * @return True if the eject was successful.
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#eject()
 	 */
+	@Override
 	public boolean eject() {
 		cancel();
 		return cdio.eject(device);
 	}
 	
-	/**
-	 * Gets the CDDB id of the disc for looking up metadata from the CDDB.
-	 * @return The CDDB id.
-	 * @throws DiscReadException if there is no disc in the drive or the disc cannot be read.
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#getCDDBId()
 	 */
+	@Override
 	public String getCDDBId() throws DiscReadException {
 		return discId.getFreeDdId();
 	}
 	
-	/**
-	 * Gets the MusicBrainz disc id for looking up metadata via MusicBrainz web services.
-	 * @return The MusicBrainz disc id.
-	 * @throws DiscReadException if there is no disc in the drive or the disc cannot be read.
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#getMusicBrainzDiscId()
 	 */
+	@Override
 	public String getMusicBrainzDiscId() throws DiscReadException {
 		return discId.getMusicBrainzDiscId();
 	}
-	
-	/**
-	 * Gets the MusicBrainz web service URL for looking up disc metadata.
-	 * @return The MusicBrainz web service URL.
-	 * @throws DiscReadException if there is no disc in the drive or the disc cannot be read.
+		
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#getMusicBrainzURL()
 	 */
+	@Override
 	public String getMusicBrainzURL() throws DiscReadException {
 		return discId.getMusicBrainzURL();
 	}
 	
-	/**
-	 * Gets the table of contents for the disc currently in the drive.
-	 * @return The table of contents.
-	 * @throws DiscReadException - if there is no disc in the drive or the disc cannot be read.
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#getTableOfContents()
 	 */
+	@Override
 	public TOC getTableOfContents() throws DiscReadException {
 		TOC toc;
 		try {
@@ -109,10 +105,10 @@ public class CDDA {
 		return toc;
 	}
 	
-	/**
-	 * Determines whether the drive contains a disc.
-	 * @return True if there is a disc in the drive. 
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#isDiscInDrive()
 	 */
+	@Override
 	public boolean isDiscInDrive() {
 		boolean result = true;
 		try {
@@ -127,12 +123,26 @@ public class CDDA {
 		return result;
 	}
 	
-	/**
-	 * Gets an {@code AudioInputStream} containing the given track. 
-	 * @param track - the id of the track to get.
-	 * @return An {@code AudioInputStream} containing the given track.
-	 * @throws DiscReadException - if there is no disc in the drive or the disc cannot be read.
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#getTrack(int)
 	 */
+	@Override
+	public AudioInputStream getTrack(int track) throws DiscReadException {
+		return getTrack(track, (RipProgressListener) null);
+	}
+
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#getTrack(int, java.io.OutputStream)
+	 */
+	@Override
+	public void getTrack(int track, OutputStream output) throws DiscReadException {
+		getTrack(track, null, output);		
+	}
+	
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#getTrack(int, cdutils.service.RipProgressListener)
+	 */
+	@Override
 	public AudioInputStream getTrack(int track, RipProgressListener listener) throws DiscReadException {
 		AudioInputStream ais;
 		logger.info("Starting rip on track ["+track+"]");
@@ -150,6 +160,10 @@ public class CDDA {
 		return ais;
 	}
 	
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#getTrack(int, cdutils.service.RipProgressListener, java.io.OutputStream)
+	 */
+	@Override
 	public void getTrack(int track, RipProgressListener listener, OutputStream output) throws DiscReadException {
 		AudioInputStream ais = getTrack(track, listener);
 		byte[] bout = new byte[1024];
@@ -162,9 +176,10 @@ public class CDDA {
 		}
 	}
 	
-	/**
-	 * Cancels the current read from the disc and frees all resources.
+	/* (non-Javadoc)
+	 * @see cdutils.service.CD#cancel()
 	 */
+	@Override
 	public void cancel() {
 		if (busy) {
 			if (ripping) {

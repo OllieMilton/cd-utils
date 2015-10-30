@@ -26,7 +26,7 @@ public class Main {
 	 */
 	public static void main(String[] args) throws Exception {
 		System.setProperty("jna.nosys", "true");
-		CD cd = new CD(args[0]);
+		CD cd = new CDDA(args[0]);
 		long start = System.currentTimeMillis();
 		if (args.length > 1) {
 			File f = new File("/home/ollie/test"+args[1]+".wav");
