@@ -1,6 +1,6 @@
 package cdutils.service;
 
-import java.io.FileInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 
@@ -80,13 +80,13 @@ public class StubCDDA implements CD {
 	public AudioInputStream getTrack(int track, RipProgressListener listener) throws DiscReadException {
 		int count = 0;
 		try {
-			while (count++ < 11) {
+			while (count++ < 10) {
 				if (listener != null) {
 					listener.onRipProgressEvent(new RipProgressEvent(this, count*10));
 				}
 				Thread.sleep(1000);
 			}
-			return AudioSystem.getAudioInputStream(new FileInputStream("C:/music/1000.wav"));
+			return AudioSystem.getAudioInputStream(new File("C:/music/1000.wav"));
 		} catch(Exception e) {
 			throw new DiscReadException(e);
 		}
