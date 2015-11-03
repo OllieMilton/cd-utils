@@ -13,6 +13,9 @@ import java.util.List;
  */
 public class TOC {
 
+	private String musicbrainzDiscURL;
+	private String musicbrainzDiscId;
+	private String cddbId;
 	private List<TOCEntry> entries;
 			
 	public TOC() {
@@ -30,7 +33,31 @@ public class TOC {
 	public int size() {
 		return entries.size();
 	}
-	
+		
+	public String getMusicbrainzDiscURL() {
+		return musicbrainzDiscURL;
+	}
+
+	public void setMusicbrainzDiscURL(String musicbrainzDiscURL) {
+		this.musicbrainzDiscURL = musicbrainzDiscURL;
+	}
+
+	public String getMusicbrainzDiscId() {
+		return musicbrainzDiscId;
+	}
+
+	public void setMusicbrainzDiscId(String musicbrainzDiscId) {
+		this.musicbrainzDiscId = musicbrainzDiscId;
+	}
+
+	public String getCddbId() {
+		return cddbId;
+	}
+
+	public void setCddbId(String cddbId) {
+		this.cddbId = cddbId;
+	}
+
 	public String getDuration() {
 		int totalSectors = getTotalSectors();
 		int secs = totalSectors/75;
