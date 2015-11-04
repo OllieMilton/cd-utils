@@ -15,6 +15,7 @@ import cdutils.exception.DiscReadException;
 public class StubCDDA implements CD {
 	
 	private int tocwait = 0;
+	private boolean discInDrive = false;
 	
 	@Override
 	public TOC getTableOfContents() throws DiscReadException {
@@ -26,6 +27,7 @@ public class StubCDDA implements CD {
 				throw new RuntimeException();
 			}
 		}
+		discInDrive = true;
 		TOC toc = new TOC();
 		for (int i = 1; i < 11; i++) {
 			TOCEntry ent = new TOCEntry();
@@ -48,22 +50,25 @@ public class StubCDDA implements CD {
 
 	@Override
 	public String getCDDBId() throws DiscReadException {
+		checkDisc();
 		return "";
 	}
 
 	@Override
 	public String getMusicBrainzDiscId() throws DiscReadException {
+		checkDisc();
 		return "dc16ccbf-ab90-4b3e-86a0-4e1b1b2404bb";
 	}
 
 	@Override
 	public String getMusicBrainzURL() throws DiscReadException {
+		checkDisc();
 		return "http://mm.musicbrainz.org/ws/1/release?type=xml&discid=pbEMghtm0TEFxJq3ZS345qjIiBk-&toc=1+10+167050+150+15345+27050+44940+61170+79155+101660+115450+131945+148855";
 	}
 
 	@Override
 	public boolean isDiscInDrive() {
-		return false;
+		return discInDrive;
 	}
 
 	@Override
@@ -81,6 +86,7 @@ public class StubCDDA implements CD {
 		int count = 0;
 		try {
 			while (count++ < 10) {
+				checkDisc();
 				if (listener != null) {
 					listener.onRipProgressEvent(new RipProgressEvent(this, count*10));
 				}
@@ -98,6 +104,7 @@ public class StubCDDA implements CD {
 		byte[] bout = new byte[1024];
 		try {
 			while (ais.read(bout) > 0) {
+				checkDisc();
 				output.write(bout);
 			}
 		} catch (IOException e) {
@@ -108,6 +115,13 @@ public class StubCDDA implements CD {
 	@Override
 	public void cancel() {
 		tocwait = 0;
+		discInDrive = false;
+	}
+	
+	private void checkDisc() throws DiscReadException {
+		if (!discInDrive) {
+			throw new DiscReadException("No disc");
+		}
 	}
 
 }
