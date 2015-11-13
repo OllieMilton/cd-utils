@@ -259,6 +259,8 @@ public class CDDAParanoia {
 	public void setVerbose(boolean verbose) {
 		if (verbose) {
 			this.verbose = 1;
+		} else {
+			this.verbose = 0;
 		}
 	}
 	
