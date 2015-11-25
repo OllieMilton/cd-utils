@@ -207,8 +207,8 @@ public class CDDA implements CD {
 			throw new DiscInUseException();
 		}
 		if (device != null) {
-			logger.info("Opening cdrom ["+device+"]");
 			paranoia.open(device);
+			logger.info("Opened cdrom ["+device+"]");
 		} else {
 			logger.info("Searching for cdrom.");
 			paranoia.open();
