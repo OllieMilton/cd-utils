@@ -8,5 +8,6 @@
         <dependency org="commons-logging" name="commons-logging" rev="1.2" conf="compile -> default"/>
         <dependency org="net.java.dev.jna" name="jna" rev="4.1.0" conf="compile -> master"/>
         <dependency org="com.googlecode.soundlibs" name="tritonus-share" rev="0.3.7-2" conf="compile -> master"/>
+        <dependency  org="ollie.utils" name="utils" rev="1.41" conf="compile -> master"/>
     </dependencies>
 </ivy-module>
