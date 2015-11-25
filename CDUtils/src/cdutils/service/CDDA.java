@@ -19,6 +19,7 @@ import cdutils.domain.TOC;
 import cdutils.domain.TOCEntry;
 import cdutils.exception.DiscInUseException;
 import cdutils.exception.DiscReadException;
+import ollie.utils.logging.LogProvider;
 
 /**
  * <p>
@@ -27,6 +28,7 @@ import cdutils.exception.DiscReadException;
  * @author Ollie
  *
  */
+@LogProvider
 public class CDDA implements CD {
 
 	private final Log logger;

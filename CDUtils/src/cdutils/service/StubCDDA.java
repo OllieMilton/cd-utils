@@ -11,7 +11,9 @@ import cdutils.domain.RipProgressEvent;
 import cdutils.domain.TOC;
 import cdutils.domain.TOCEntry;
 import cdutils.exception.DiscReadException;
+import ollie.utils.logging.LogProvider;
 
+@LogProvider
 public class StubCDDA implements CD {
 	
 	private int tocwait = 0;
