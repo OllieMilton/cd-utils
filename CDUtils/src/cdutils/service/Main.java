@@ -25,11 +25,14 @@ public class Main {
 	 * @param args - args[0] = device args[1] track to rip.
 	 */
 	public static void main(String[] args) throws Exception {
-		System.setProperty("jna.nosys", "true");
+		//System.setProperty("jna.nosys", "true");
 		CD cd = new CDDA(args[0]);
+		cd.setVerbose();
+		System.out.println("CD Utils versions - "+cd.getLibraryVersions());
 		long start = System.currentTimeMillis();
 		if (args.length > 1) {
-			File f = new File("/home/ollie/test"+args[1]+".wav");
+			File f = new File("test"+args[1]+".wav");
+			f.setWritable(true);
 			AudioSystem.write(cd.getTrack(Integer.valueOf(args[1]), new PL()), Type.WAVE, f);
 			long dur = System.currentTimeMillis()-start;
 			int secs = (int) dur/1000;

@@ -31,6 +31,7 @@ public class CDDAParanoia {
 		String paranoia_version();
 		long paranoia_seek(Pointer cdpar,long seek,int mode);
 		Pointer paranoia_read_limited(Pointer cdrom, Pointer callback, int max_retries);
+		Pointer paranoia_read(Pointer cdrom, Pointer callback);
 		void paranoia_free(Pointer cdpar);
 	}
 	
