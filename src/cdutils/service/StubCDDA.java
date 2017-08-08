@@ -126,4 +126,14 @@ public class StubCDDA implements CD {
 		}
 	}
 
+	@Override
+	public void setVerbose() {
+		
+	}
+
+	@Override
+	public String getLibraryVersions() {
+		return null;
+	}
+
 }

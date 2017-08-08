@@ -154,6 +154,7 @@ public class CDDA implements CD {
 			if (track < 1 || track > toc.size()) {
 				throw new IllegalArgumentException("Track ["+track+"] is an invalid track no");
 			}
+			logger.info("Building audio input stream.");
 			ais = new CddaAudioInputStream(track, listener);
 		} catch (Exception e) {
 			close();
@@ -215,6 +216,8 @@ public class CDDA implements CD {
 			logger.info("Searching for cdrom.");
 			paranoia.open();
 		}
+		paranoia.setSpeed(24);
+		logger.info("***** DRIVE OPEN *****");
 		busy = true;
 	}
 	
@@ -248,7 +251,7 @@ public class CDDA implements CD {
 				toc.addEntry(ent);
 			}
 		}
-		logger.debug("Got table of contents:\n"+toc.toString());
+		logger.info("Got table of contents:\n"+toc.toString());
 		return toc;
 	}
 	
@@ -269,19 +272,36 @@ public class CDDA implements CD {
 		 * Constructs a new {@code CddaAudioInputStream} for the given track. 
 		 * @param track - the track to read from the disc.
 		 */
-		public CddaAudioInputStream(int track, RipProgressListener listener) {
+		public CddaAudioInputStream(int track, RipProgressListener listener) throws DiscReadException {
 			super(cddaFormat, AudioSystem.NOT_SPECIFIED);
+			paranoia.getTracks();
+			logger.info("Calling getFirstSector");
 			firstFrame = paranoia.getFirstSector(track);
+			if (firstFrame < 0) {
+				throw new DiscReadException("Received error ["+firstFrame+"] on first frame for track ["+track+"]");
+			}
+			logger.info("Got FS "+firstFrame+" Calling getLastSector");
 			lastFrame = paranoia.getLastSector(track);
+			if (lastFrame < 0) {
+				throw new DiscReadException("Received error ["+lastFrame+"] on last frame for track ["+track+"]");
+			}
 			totalFrames = lastFrame - firstFrame;
+			logger.info("Got LS "+lastFrame+"Seeking");
 			paranoia.seek(firstFrame);
 			this.listener = listener;
 			this.track = track;
 			ripping = true;
+			logger.info("Errors: "+paranoia.getErrors());
+			logger.info("Message: "+paranoia.getMessage());
 		}
 		
 		@Override
 		public void execute() {
+			logger.info("In execute frame count: "+frameCount);
+			logger.info("In execute total frames: "+totalFrames);
+			logger.info("Buffer availible: "+getCircularBuffer().availableWrite());
+			logger.info("Errors: "+paranoia.getErrors());
+			logger.info("Message: "+paranoia.getMessage());
 			if (terminated) {
 				closeAIS();
 				logger.info("Terminated, releasing resources.");
@@ -289,7 +309,13 @@ public class CDDA implements CD {
 			}
 			try {
 				while (frameCount < totalFrames && getCircularBuffer().availableWrite() >= CDDAParanoia.cddaFrameSize) {
-					getCircularBuffer().write(paranoia.readNextFrame());
+					logger.info("Getting next frame...");
+					byte[] frame = paranoia.readNextFrame();
+					logger.info("Writing frame...");
+					getCircularBuffer().write(frame);
+					logger.info("Writing frame done");
+					logger.info("Errors: "+paranoia.getErrors());
+					logger.info("Message: "+paranoia.getMessage());
 					frameCount++;
 				}
 				if (listener != null) {
@@ -313,5 +339,15 @@ public class CDDA implements CD {
 			getCircularBuffer().close();
 			CDDA.this.close();
 		}
+	}
+
+	@Override
+	public void setVerbose() {
+		paranoia.setVerbose(true);
+	}
+	
+	@Override
+	public String getLibraryVersions() {
+		return paranoia.getVersion();
 	}
 }

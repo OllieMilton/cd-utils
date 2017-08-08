@@ -96,4 +96,8 @@ public interface CD {
 	 * Cancels the current read from the disc and frees all resources.
 	 */
 	public void cancel();
+	
+	public void setVerbose();
+	
+	public String getLibraryVersions();
 }

@@ -26,6 +26,13 @@
   	<target name="jar" depends="compile">
 		<!-- Build the jar file -->
 		<jar basedir="${build}" destfile="${build}/cdutils.jar">
+			<manifest>
+                <attribute name="Main-Class" value="cdutils.service.Main"/>
+            </manifest>
+			<zipgroupfileset dir="lib">
+				<include name="**/*.jar" />
+			</zipgroupfileset>
+			<fileset file="src/log4j.properties"/>
 			<fileset dir="src" includes="**/*.java"/>
 		</jar>
 	</target>  	
@@ -34,7 +41,7 @@
         <ivy:publish resolver="ivysvn" pubrevision="1.12" update="true" overwrite="true">
         	<artifacts pattern="${build}/[artifact].[ext]"/>
         </ivy:publish>
-		<delete dir="${build}"/>
-		<delete dir="lib"/>
+		<!--delete dir="${build}"/>
+		<delete dir="lib"/-->
 	</target>
 </project>
